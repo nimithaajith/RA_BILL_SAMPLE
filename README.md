@@ -15,7 +15,16 @@ Key Features:
     🐳 Fully Dockerized setup for easy deployment and scaling.
 
 ## 💻 Screenshots
-Please see the Screenshots folder for real project screenshots
+# Please see the Screenshots folder for real project screenshots
+
+# Only some sample codes are provided, not entire project
+
+1. update .env with real values
+2. clone the repo
+3. generate ssl certificates
+4. create volumes needed like certbot-etc
+5. build and run docker files
+6. Database is supposed to be seperately hosted. or if you wish add it as new service to docker-compose
 
 
     
