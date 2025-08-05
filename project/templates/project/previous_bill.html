@@ -1,0 +1,225 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block scriptcontent %}      
+{% endblock %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+
+<h3 class="text-light fw-bolder" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);">PROJECT : BILL</h3>
+{% if msg %}
+<div class="card mt-3" >
+    <h2 class="form-heading bg-light text-danger fw-bolder m-3" style="width: fit-content;">{{msg}}</h2>
+</div>
+
+{% endif %}   
+{% if not page_object %} 
+<div class="card " >
+    <h2 class="form-heading bg-light text-danger fw-bolder m-3">No match found...</h2>
+</div>
+
+{% endif %} 
+    
+         
+        
+{% if bill %} 
+<div class="card-trans border border-primary m-2 p-2" style="background-color: rgba(255, 255, 255, 0.253)"> 
+<a href="{% url 'project:PreviousBill' bill.id 1  %}" class="text-light" style='font-size:25px' >
+    <i class='fas fa-redo text-light' style='font-size:25px'></i>
+    Refresh {{bill.bill_name}}
+</a>     
+{% if page_object %}    
+    
+    <div class="row bg-light p-3 m-3"> 
+        <h4 class="m-3 fw-bold">Bill Details </h4>  
+        <hr>     
+        <div class="col">            
+            <h6 class="fw-bold ms-3">Bill Count :{{ bill.bill_number }} </h6>          
+        </div>
+        <div class="col">
+            <h6 class="fw-bold">Bill Name :{{ bill.bill_name }} </h6>                    
+        </div>
+        <div class="col">
+            <h6 class="fw-bold">Bill Date :{{ bill.bill_date }} </h6>              
+        </div>        
+    </div>
+    <div class="row m-3">{{bill.other_details}}</div>
+    <div class="row bg-light p-3 m-3">
+        <h4 class="m-3 text-primary fw-bold">Approvals</h4>             
+        <div class="col">
+            {% if bill.consultant_approved %} 
+                <p><i class="fas fa-user-check py-2 text-success"></i>Approved by Consultant on {{bill.consultant_approved|to_ist}}.</p>
+            {% elif bill.shared_to_consultant %} 
+                <p>{{bill.bill_name}} Shared with Consultant for approval on {{ bill.shared_to_consultant|to_ist}}.</p>
+            {% else %} 
+                <a href="{% url 'project:ShareToConsultant' bill.id %}" class="btn btn-custom"><i class="fas fa-share py-2"></i> Share {{ bill.bill_name }} to Consultant</a>
+            {% endif %}  
+        </div>
+        <div class="col">
+            {% if bill.owner_approved %} 
+                <p><i class="fas fa-user-check py-2 text-success"></i>Approved by Owner/client on {{bill.owner_approved|to_ist }}.</p>
+            {% elif bill.shared_to_owner %} 
+                <p>{{bill.bill_name}} Shared with Owner for approval on {{ bill.shared_to_owner|to_ist}}</p>
+            {% endif %}   
+        </div>
+
+    </div>
+</div>
+<div class="card border border-primary p-2 mx-1" style="background-color: rgba(255, 255, 255, 0.253)">
+    <div class="inline-items">
+        <span class=" bg-secondary border border-primary  text-light p-3 fw-bold">Total Pages : {{page_object.paginator.num_pages}} </span>
+        {% if page_object.has_previous %}
+            <a href="{% url 'project:PreviousBill' bill.id page_object.number|add:'-1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-reply text-primary py-2"></i></a> 
+        {% endif %}
+        <span class="mx-2 bg-secondary border border-primary  text-light p-3"><b>Current Page : {{page_object.number}}</b></span>
+        {% if page_object.has_next %}
+            <a href="{% url 'project:PreviousBill' bill.id page_object.number|add:'1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-share text-primary py-2"></i></a> 
+        {% endif %}
+        <span class="ms-5 mx-2 p-3 text-light">  
+            <form id="searchfrm" action="{% url 'project:SearchBillItem' bill.id 1 %}" class="bg-secondary border border-primary " method="post">
+            {% csrf_token %}
+                <div class="input-group inline text-light border-2 border-dark" >                    
+                    <input type="search" id="searchitem"  name="searchitem" class="inline fw-bold w-auto bg-secondary text-light border border-0 px-5" placeholder="Enter item to search....">
+                    <button type="submit" class="btn bg-light text-primary rounded-circle ms-1 my-2"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div>
+            </form>
+            <small style="font-size: 15px;font-weight: bold;color: orangered;">*Search item by description</small>
+            
+        </span>  
+    </div>
+    
+    <table class="table bg-light border border-primary p-3 shadow-lg" name="billtable" id="billtable" >
+        <thead class="bg-secondary text-light">
+            <tr>
+                <th scope="col" style="width: 150px;">DATE</th> 
+                <th scope="col">SL NO</th>
+                <th scope="col">ITEM DESCRIPTION</th>                                         
+                <th scope="col">MBOOK</th>
+                {% if bill.shared_to_consultant %}
+                <th scope="col">CONSULTANT</th>
+                {% endif %}
+                <!-- {% if bill.shared_to_owner %}
+                <th scope="col">OWNER</th>
+                {% endif %} -->
+
+            </tr>
+        </thead>
+        <tbody >
+            {% for object in page_object %}
+                {% if not object.extra_item %}
+                    {% if object.heading %}
+                        <tr> 
+                            <td></td>                                
+                            {% if object.serial_no == 'nan' %}  
+                                <td></td>  
+                            {% else %}                            
+                                <td class="fw-bolder">{{object.serial_no}}</td>
+                            {% endif %}
+                            <td class="fw-bolder">{{object.description}}</td>   
+                            <td class="fw-bolder"></td>  
+                            {% if bill.shared_to_consultant %}
+                            <td ></td>
+                            {% endif %}
+                            <!-- {% if bill.shared_to_owner %}
+                            <td ></td>
+                            {% endif %}                                                          -->
+                        </tr>
+                    {% else %}                        
+                        <tr >
+                            <th scope="row">{{object.work_order_date}}</th>
+                            {% if object.serial_no == 'nan' %}  
+                                <td></td>  
+                            {% else %}                            
+                                <td>{{object.serial_no}}</td>
+                            {% endif %}
+                            
+                            <td >{{object.description}}</td>                
+                            
+                            <td>
+                                <a href="{% url 'project:PreviousMeasurements' bill.id object.id 1 %}">+Measurements</a>
+                            </td> 
+                            {% if bill.shared_to_consultant %}
+                            <td ><a href="{% url 'project:ConsultantApprovals' bill.id object.id 1 %}">Approvals</a></td>
+                            {% endif %}
+                            <!-- {% if bill.shared_to_owner %}
+                            <td> <a >Approvals</a></td>
+                            {% endif %} -->
+              
+                            
+                        </tr>
+                    {% endif %}
+                {% else %}
+                    <!-- {% if object.subheading %} 
+                        <tr >
+                            <td></td>
+                            {% with object.subheading|split:"&&&" as parts %}
+                            <td class="text-primary fw-bolder">{{ parts.0 }}</td>
+                            <td class="text-primary fw-bolder">{{ parts.1 }}</td>
+                            {% endwith %}
+                        </tr>        
+                    {% endif %} -->
+                    <tr >
+                        <th scope="row">{{object.work_order_date}}</th>
+                        {% if object.serial_no == 'nan' %}  
+                            <td></td>  
+                        {% else %}                            
+                            <td>{{object.serial_no}}</td>
+                        {% endif %}
+                        
+                        <td ><p style="color: rgb(255, 0, 55);font-size:20px;">Extra Item : </p>{{object.description}}</td>                
+                        
+                        <td>
+                            <a href="{% url 'project:PreviousMeasurements' bill.id object.id 1 %}">+Measurements</a>
+                        </td>
+                        {% if bill.shared_to_consultant %}
+                        <td >
+                            <a href="{% url 'project:ConsultantApprovals' bill.id object.id 1 %}">Approvals</a>
+                        </td>  
+                        {% endif %}
+                            
+                        
+                        <!-- <td>
+                            <a href="" class="btn btn-custom m-1 rounded-circle">
+                            <i class='fas fa-trash py-2' style='color:red;font-size:20px;'></i></a>
+                        </td> -->
+                    </tr>                    
+                {% endif %}
+            {% endfor %}
+            
+        </tbody>
+    </table>
+    
+    <div class="inline-items">
+        <span class="mx-2 bg-secondary border border-primary  text-light p-3 fw-bold">Total Pages : {{page_object.paginator.num_pages}} </span>
+        {% if page_object.has_previous %}
+            <a href="{% url 'project:PreviousBill' bill.id page_object.number|add:'-1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-reply text-primary py-2"></i></a> 
+        {% endif %}
+        <span class="mx-2 bg-secondary border border-primary  text-light p-3"><b>Current Page : {{page_object.number}}</b></span>
+        {% if page_object.has_next %}
+            <a href="{% url 'project:PreviousBill' bill.id page_object.number|add:'1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-share text-primary py-2"></i></a> 
+        {% endif %}
+        <span class="ms-5 mx-2 p-3 text-light">  
+            <form id="phonesearchfrm" action="{% url 'project:SearchBillItem' bill.id 1 %}" class="bg-secondary border border-primary " method="post">
+            {% csrf_token %}
+                <div class="input-group inline text-light border-2 border-dark" >                    
+                    <input type="search" id="searchitem"  name="searchitem" class="inline fw-bold w-auto bg-secondary text-light border border-0 px-5" placeholder="Enter item to search....">
+                    <button type="submit" class="btn bg-light text-primary rounded-circle ms-1 my-2"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div>
+            </form>
+            <small style="font-size: 15px;font-weight: bold;color: orangered;">*Search item by description</small>
+            
+        </span> 
+        
+    </div>
+
+    
+{% endif %}
+</div>
+{% else %}
+  <center>
+    <a href="{% url 'project:CreateBill' %}" class="btn btn-custom p-3 fs-3 text m-4">Create New Bill</a>
+  </center>  
+   
+{% endif %}     
+{% endblock %}

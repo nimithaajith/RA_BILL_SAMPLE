@@ -1,0 +1,122 @@
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+{% if msg %}
+    <div class="p-3 my-2 bg-light">
+        <h2 class="form-heading text-danger fw-bolder m-3">{{msg}}</h2>
+    </div>    
+{% endif %} 
+
+<div class="card border-primary mt-5 mx-4 p-5" style="background-color: rgba(255, 255, 255, 0.253)">                  
+    {% if cop and copmaster %}  
+    <div class="row bg-light p-4">
+        <form class="p-4 text-primary" action="{% url 'project:DownloadCOP' bill.id %}" id="cop_form" method="POST" >
+            {% csrf_token %} 
+            <input type="submit" id="downloadcop" class="btn form-btn-custom w-75" value="Download Tax Invoice">           
+        </form>         
+    </div>
+    {% endif %} 
+    {% if copmaster  %}  
+    <div class="row my-0 p-3 bg-light">
+        <h3 class="text-dark my-5"><b>Invoice No:</b>{{cop.invoice_no}}  | <b>Date:</b> {{cop.date_of_bill}} <a style="font-size: medium;" href="{% url 'project:ManageCOPMaster' bill.id %}" >Click here to edit project Tax Invoice details</a></h3>
+        <h4 class="fw-bolder text-primary">CONSIGNEE:</h4>
+        <hr>
+        <div class="col">
+            <h4 class="px-3 text-dark"><b>Name :</b>{{company.company_name}}</h4>
+            <h4 class="px-3 text-dark"><b>Address :</b>{{company.company_address}}</h4>
+            <h4 class="px-3 text-dark"><b>Phone Number :</b>{{company.country_code}}-{{company.company_phone}}</h4>
+            <h4 class="px-3 text-dark"><b>Email id:</b>{{company.company_email}}</h4>
+            <h4 class="px-3 text-dark"><b>GSTIN No.:</b>{{copmaster.gst_no}}</h4>
+        </div>                       
+        <div class="col">
+            <h4 class="px-3 text-dark"><b>Bank Name :</b> {{copmaster.bank}} </h4>
+            <h4 class="px-3 text-dark"><b>IFSC Code : </b>{{copmaster.ifsc}}</h4>
+            <h4 class="px-3 text-dark"><b>Branch Code :</b>{{copmaster.branch}}</h4>
+            <h4 class="px-3 text-dark"><b>Account No. : </b>{{copmaster.acno}}</h4>            
+        </div>
+        <div class="col">
+            <img src="{{ MEDIA_URL }}{{copmaster.company_logo}}" alt="logo">
+        </div>
+    </div>  
+    <div class="row my-0 p-3 bg-light">
+        <h4 class="fw-bolder text-primary">RECEIVER:</h4>
+        <hr>
+        <div class="col">                  
+            <h4 class="px-3 text-dark"><b>Name :</b>{{copmaster.receiver_name}}</h4>
+            <h4 class="px-3 text-dark"><b>Address :</b> {{copmaster.receiver_address}}</h4>
+            <h4 class="px-3 text-dark"><b>GSTIN No. :</b>{{copmaster.receiver_gst_no}}</h4>
+            
+        </div>
+        <div class="col">    
+            <h4 class="px-3 text-dark"><b>State :</b>{{copmaster.receiver_state}}</h4>
+            <h4 class="px-3 text-dark"><b>Code :</b> {{copmaster.receiver_code}}</h4>
+        </div>
+    </div>
+    <div class="row mt-5 mb-3 p-3 bg-light">
+        <div class="col">                  
+            <h4 class="px-3 text-dark"><b>Order Acceptance No :</b>{{copmaster.order_acceptance_no}} </h4>
+            <h4 class="px-3 text-dark"><b>Terms Of Payment :</b>{{copmaster.terms_of_payment}}</h4>
+        </div>
+    </div>
+    
+    {% endif %}
+    {% if cop %}
+    <div class="row mt-5 mb-3 p-3 bg-light">
+        <h4 class="fw-bolder text-primary">BILL : {{bill.bill_name}} <a style="font-size: medium;" href="{% url 'project:ManageCOPBill' bill.id %}" >Click here to edit bill Tax Invoice details</a></h4>
+        <hr>             
+        
+        <div class="col">
+            {% if cop.supply_of_goods %} 
+                <h4 class="px-3 text-dark fw-bolder">* Supply of goods</h4>
+            {% endif %}
+            {% if cop.supply_of_services %} 
+                <h4 class="px-3 text-dark fw-bolder">* Supply of services</h4>
+            {% endif %}
+            {% if cop.stock_transfer %} 
+                <h4 class="px-3 text-dark fw-bolder">* Stocktransfer</h4>
+            {% endif %}
+            {% if cop.debit_credit_notes %} 
+                <h4 class="px-3 text-dark fw-bolder">* Debit note & credit note</h4>
+            {% endif %}
+            {% if cop.other_supplies %} 
+                <h4 class="px-3 text-dark fw-bolder">* Other supplies</h4>
+            {% endif %}
+        </div>        
+    </div> 
+    <div class="row bg-light my-0 p-4">
+        <h4 class="fw-bolder text-primary">Tax Details</h4>
+        <hr>
+        <div class="col">
+            {% if cop.gst_inclusive %} 
+                <h4 class="px-3 text-dark fw-bolder">* GST inclusive</h4>
+            {% else %} 
+                <h4 class="px-3 text-dark fw-bolder">* GST not inclusive</h4>
+            {% endif %}                  
+            <h4 class="px-3 text-dark"><b>SGST : </b>{{cop.sgst}}</h4>
+            <h4 class="px-3 text-dark"><b>CGST :</b>{{cop.cgst}}</h4>
+            <h4 class="px-3 text-dark"><b>IGST :</b>{{cop.igst}}</h4>
+            <h4 class="px-3 text-dark"><b>UGST :</b>{{cop.ugst}}</h4>
+        </div>        
+    </div>  
+    {% endif %}
+    {% if cop and copmaster %}  
+    <div class="row bg-light mt-3 p-4">
+        <form class="p-4 text-primary my-3" action="{% url 'project:DownloadCOP' bill.id %}" id="cop_form" method="POST" >
+            {% csrf_token %} 
+            <input type="submit" id="downloadcop" class="btn form-btn-custom w-75" value="Download Tax Invoice">           
+        </form>         
+    </div>
+    {% elif not copmaster %} 
+    <div class="row bg-light p-4">
+        <a href="{% url 'project:ManageCOPMaster' bill.id %}" ><h3>Missing Tax Invoice Details. Click here to add</h3></a>
+    </div>
+    {% elif not cop %} 
+    <div class="row bg-light p-4">
+        <a href="{% url 'project:ManageCOPBill' bill.id %}" ><h3>Missing Tax Invoice Details of bill- {{bill.bill_name}}. Click here to add</h3></a>
+    </div>
+    {% endif %}    
+</div>
+{% endblock %}

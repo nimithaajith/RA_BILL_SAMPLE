@@ -1,0 +1,241 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100%; /* Ensures the body stretches at least to 100% of the viewport */
+    background: none; /* No default background */
+    font-family: 'Times New Roman', Times, serif;
+    background-size: cover; /* Ensure the background covers the entire page */
+    background-position: center center;  /* Center the background image */
+    background-repeat: no-repeat;  /* Do not repeat background */
+    background: url("../images/measurement.jpg") no-repeat center center fixed;
+}
+
+
+#icon-avatar{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    
+    background-image: linear-gradient(rgb(52, 245, 235), rgb(20, 112, 124),rgb(2, 46, 54));
+    color: white;
+    border-radius: 50%;
+    width: fit-content;
+    padding: 15px;
+    font-size: large;
+}
+
+
+.card{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.514), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 20px;
+}
+
+
+.inline-items {
+    display: inline-flex;
+    align-items: center;
+}
+.inline-items .btn {
+    margin-right: 10px; /* Space between buttons */
+}
+
+.navbar{
+    background-color: rgba(255, 255, 255, 0.397) !important;
+}
+
+.btn-round {
+    
+    padding: 3px;
+    box-shadow: -4px -4px 8px rgba(122, 123, 124, 0.5), 4px 4px 8px rgba(0, 7, 24, 0.692);
+    transition: all 0.2s ease;
+    
+}
+
+.btn-round:hover {    
+    box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+.btn-round:active {    
+    box-shadow: -1px -1px 4px rgba(255, 255, 255, 0.5), 1px 1px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(4px);
+}
+
+.btn-custom {
+    background-color: white;
+    color: rgb(94, 100, 102);
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+    border-radius: 50px;    
+    padding: 5px 10px;
+    margin: 10px 10px;
+    box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(0, 0, 0, 0.3);
+    
+    transition: all 0.2s ease;
+    
+    font-weight: bold;
+    text-shadow: inset 0px -2px 4px rgba(1, 26, 26, 0.9); /* Inset shadow for "inward" effect */
+}
+
+.btn-custom:hover {    
+    box-shadow: -4px -4px 8px rgba(0, 6, 17, 0.521), 4px 4px 8px rgba(0, 7, 24, 0.692);
+    transform: translateY(2px);
+}
+
+.btn-custom:active {    
+    box-shadow: -1px -1px 4px rgba(255, 255, 255, 0.5), 1px 1px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(4px);
+}
+
+.form-box {
+    width: 50%; 
+    min-width: 200px;
+    margin: 20px; 
+    background-color: white;
+    padding: 40px;
+    color: #26a7ac;
+    box-shadow: -4px -4px 8px rgba(56, 55, 55, 0.15), 4px 4px 8px rgba(65, 63, 63, 0.3);
+}
+.form-control {
+    
+    padding: 10px 15px;
+    
+    border-radius: 50px; 
+    color: #26a7ac;
+    box-shadow: -4px -4px 8px rgba(0, 0, 0, 0.01), 4px 4px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    
+}
+.form-control {
+    padding: 10px 15px;
+    border-radius: 50px; 
+    color: #26a7ac;
+    background-color: white; /* Optional: keep a consistent background */
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.7); /* Inset shadow for the "inward" effect */
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    background-color: white;
+    border: 0px;
+    border-radius: 50px; 
+    color: #116164;
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.7); /* Keep the same shadow */
+    transform: translateY(0); /* No translation needed for the focus state */
+}
+
+
+
+
+.form-btn-custom {
+    background-color: white;
+    color: #26a7ac;
+    border-radius: 50px;    
+    padding: 10px 20px;
+    box-shadow: -4px -4px 8px rgba(0, 0, 0, 0.09), 4px 4px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    font-weight: bold;
+} 
+
+.form-btn-custom:hover {    
+    box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+.form-btn-custom:active {    
+    box-shadow: -1px -1px 4px rgba(255, 255, 255, 0.5), 1px 1px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(4px);
+}
+.form-heading {
+    
+    color: #26a7ac;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Light shadow effect */
+}
+
+img {
+    max-width: 100%; 
+    max-height: 200px; 
+    height: auto; 
+    width: auto; 
+    border:solid 5px rgb(43, 2, 56);
+}
+
+
+@keyframes popupEffect {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translate(-50%, -50%);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translate(-50%, -50%);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+}
+
+.suggestions-container {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    width: 80vh;    
+    transform: translate(-50%, -50%);
+    color:rgb(3, 3, 75);
+    font-weight: bolder;
+    /* background: #ffffff65; */
+    padding: 20px;
+    box-shadow: 0 0 10px #181818;
+    z-index: 9999;
+    height:auto;
+    max-height: 95vh; /* Maximum height of 85% of the viewport height */
+    overflow: auto;
+    /* background-color: rgba(237, 239, 241, 0.404); */
+    background-color: rgba(254, 254, 255, 0.1); /* Adjust alpha for transparency */
+    backdrop-filter: blur(10px); /* Adds blur effect to the background */
+    border-radius: 10px; /* Optional: Makes the edges rounded */
+    border: 1px solid rgba(0, 0, 0, 0.2); /* Optional: A subtle border for better visibility */
+    animation: popupEffect 0.5s ease-out; 
+    /* transition: opacity 0.3s ease, transform 0.3s ease; */
+}
+
+#overlay {
+    /* position: fixed; */
+    /* top: 0;
+    left: 0; */
+    width: 100%;
+    height: 100%;
+    /* background-color: rgb(105, 109, 112); */
+    overflow: auto;
+    
+}
+
+
+.suggestion-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    
+}
+
+.close-btn {
+    background-color: white;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color:grey;
+    border-radius: 50%;
+    box-shadow: -4px -4px 8px rgba(0, 0, 0, 0.09), 4px 4px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    padding: 10px 20px;
+}
+
+.close-btn:hover {
+    color: #26a7ac;
+    box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}

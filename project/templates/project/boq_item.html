@@ -1,0 +1,113 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+
+
+    
+<div class="row">
+    <div class="col-md-2">
+        <h4 class="p-3 m-3 bg-light shadow-lg"><a href="{% url 'project:ManageBOQ' 1 %}" ><i class='far fa-arrow-alt-circle-left me-3' style="font-size: 30px;"></i>Back to BoQ</a></h4>
+  
+    </div>
+</div>    
+  
+
+ 
+{% if boqitem %}
+<div class="card-trans border border-info  m-5 p-3 shadow-lg rounded" > 
+                 
+    <div class="row">
+        <h4>Modify item <b>{{boqitem.serial_no}}</b> in BoQ</h4>
+        <form class="p-0 text-primary px-4" action="{% url 'project:ManageItem' boqitem.id %}" id="wo_boq_form" method="POST" >
+            {% csrf_token %}             
+            <div class="row  my-0 bg-light">                                  
+                <div class="col my-3 p-2 px-5">  
+                    
+                    <div class="row">
+                        <textarea id="itemdesc" name="itemdesc" rows="3" class="form-control mb-3 rounded-0" >{{boqitem.description}} </textarea>               
+                    </div>         
+                
+                    <div class="row">
+                        <div class="col">
+                            <label>Serial No</label>
+                            <input type="text" id="serialno" name="serialno" class="form-control mb-3" value="{{boqitem.serial_no}}">                
+                        </div>
+                        <div class="col">
+                            <label>Extra-item/not</label>
+                            <select name="extraitem" id="extraitem" class="form-control" >
+                                {% if boqitem.extra_item %}
+                                    <option value="Yes" selected>Yes</option>
+                                    <option value="No" >No</option>
+                                {% else %}  
+                                    <option value="No" selected>No</option>
+                                    <option value="Yes">Yes</option> 
+                                {% endif %}                   
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>Date(mm/dd/yyyy)</label>
+                            <input type="date" id="wo_date" name="wo_date" class="form-control mb-3 w-100"  style="width: fit-content;" value="{{boqitem.work_order_date|date:'Y-m-d'}}">                
+                        </div>                    
+                                             
+                    
+                        <div class="col">
+                            <label>Quantity</label>
+                            <input type="number" step="0.01" id="quantity" name="quantity" class="form-control mb-3" value="{{boqitem.quantity}}">                
+                        </div>
+                        <div class="col">
+                            <label>Rate</label>
+                            <input type="number" step="0.01" id="rate" name="rate" class="form-control mb-3" value="{{boqitem.rate}}">                
+                        </div> 
+                        <div class="col">
+                            <label>Amount</label>
+                            <input type="number" step="0.01" name="amount" id="amount" class="form-control" value="{{boqitem.amount}}">
+                        </div>                        
+                        <div class="col">
+                            <label>Units</label>
+                            <input type="text" id="unit" name="unit" class="form-control mb-3" value="{{boqitem.unit}}">                
+                        </div>
+                    </div>   
+                    <div class="row">                     
+                        <div class="col">
+                            <input class="btn form-btn-custom border border-0 m-3 px-3 w-50" type="submit" value="Save Changes to BoQ">
+                        </div>
+                        <div class="col">
+                            <a href="{% url 'project:ManageBOQ' 1 %}" class="btn form-btn-custom border border-0 m-3 px-3 w-50">Cancel</a>
+                        </div>                        
+                    </div>                    
+                </div>
+            </div>                         
+        </form> 
+    </div>
+</div>
+<div class="card-trans  border border-info  m-5 p-3 shadow-lg rounded" >         
+    <div class="row m-3 bg-light p-3" > 
+        
+        <h4>Remove item <b>{{boqitem.serial_no}}</b> in BoQ</h4>      
+        <button class="form-btn-custom text-danger border border-0 px-3 w-50" onclick="showConfirm()">Remove item from BoQ </button>
+        <div id="deleteconfirm" class="my-3" style="display: none;">
+            <label class="text-danger fw-bolder">This action will remove the item from BoQ and all its measurements(if any) in current bill.</label>
+            <label>click <b>Yes</b> to confirm or <b>No</b> to cancel</label>
+            <div class="row">
+                <div class="col">
+                    <a href="{% url 'project:DeleteItem' boqitem.id %}" class="btn form-btn-custom text-danger border border-0 mt-5 px-3" >Yes</a>
+                </div>
+                <div class="col">
+                    <button onclick="hideConfirm()" class="form-btn-custom border border-0 mt-5 px-3">No</button>
+                </div>
+            </div>            
+        </div>        
+    </div>     
+</div>
+{% endif %}
+<script src="{% static 'project/js/item.js' %}"></script>        
+{% endblock %}
+
+
+
+
+
+<a href="{% url 'project:ManageBOQ' 1 %}" class="btn form-btn-custom text-danger border border-0 mt-5 px-3">Delete Item from BoQ</a>

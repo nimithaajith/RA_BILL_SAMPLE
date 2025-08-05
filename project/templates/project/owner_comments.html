@@ -1,0 +1,97 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}   
+    
+
+{% if measurement %} 
+
+<div class="card mt-2" > 
+    <div class="row">
+         
+            {% if measurement.bill.submitted %}
+                <h4 class="m-3"><a href="{% url 'project:ConsultantApprovals' measurement.bill.id measurement.woboqitem.id 1 %}" ><i class='far fa-arrow-alt-circle-left me-3' style="font-size: 30px;"></i>Back To Measurements</a></h4> 
+            
+            {% endif %}
+        
+    </div>  
+    <div class="row ms-3 pt-3">        
+        <h5>ITEM : {{measurement.woboqitem.description}}</h5>
+    </div>                 
+    <div class="row ms-3">
+        
+            <h4 class="fw-bold">Measurement Details </h4>
+            
+            <hr>  
+            <h5>{{measurement.m_description}}</h5>          
+            <h5><span class="inline-items py-3"><b>Date :</b>{{measurement.entry_date}} |
+            
+            <b>Count :</b>{{measurement.count}} | 
+            <b>Length :</b>{{measurement.length}} |
+            <b>Breadth :</b>{{measurement.breadth}} |
+            <b>Height :</b>{{measurement.height}} |
+            <b>Number Of this Measurement :</b>{{measurement.number}} |
+            <b>Quantity :</b>{{measurement.quantity}}</span>  </h5> 
+            {% if measurement.approved_by_consultant %} 
+                * This measurement was approved by consultant on {{ measurement.approved_by_consultant | to_ist }}
+            {% endif %}    
+                   
+    </div>
+</div>    
+{% if comments %}
+<div class="card-trans border-primary bg-light mt-5 m-3 p-3" > 
+    <div class="row ms-3 pt-3">        
+        <h5>OWNER COMMENT HISTORY</h5>
+    </div> 
+    <table class="table table-bordered bg-light border-primary m-2 p-3 shadow-lg" style="max-width: 98%;font-weight: bold;">
+        <thead class="bg-secondary text-light">
+            <tr>
+                <th scope="col">DATE</th> 
+                <th scope="col">COMMENT</th>
+                <th scope="col">MEASUREMENT</th>
+                <th scope="col">CONSULTANT STATUS</th> 
+                <th scope="col">OWNER STATUS</th>               
+            </tr>
+        </thead>
+        <tbody >            
+            {% for comment in comments %}            
+            <tr >
+                <th scope="row">{{comment.commented_on | to_ist}}</th>
+                <td>{{comment.comment}}</td>
+                <td>{{comment.measurement_backup}}</td>
+                {% if comment.consultant_status == 'closed' %}
+                    <td >CLOSED</td>                   
+                {% else %} 
+                    <td class="text-danger fw-bolder">OPEN</td>    
+                {% endif %}
+                {% if comment.status == 'closed' %}
+                    <td >CLOSED</td>                   
+                {% else %} 
+                    <td class="text-danger fw-bolder">OPEN</td>    
+                {% endif %}
+            </tr>
+            {% endfor %}            
+        </tbody>
+    </table>  
+    
+</div>
+{% else %} 
+<div class="card-trans border-primary bg-light mt-5 m-3 p-3" > 
+    <div class="bg-light">
+        No Comments Found.
+        {% if measurement.approved_by_consultant %} 
+         This measurement was approved by consultant on {{ measurement.approved_by_consultant | to_ist }}
+        {% endif %} 
+    </div>
+</div> 
+
+{% endif %}       
+{% endif %}
+ 
+{% endblock %}
+{% block scripts %}
+    {{ block.super }} 
+          
+{% endblock %} 

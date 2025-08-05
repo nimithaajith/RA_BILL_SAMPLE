@@ -1,0 +1,27 @@
+{% extends 'project/base.html' %}
+{% block navcontent %}
+
+      
+{% endblock %}
+{% block maincontent %}
+<div class="card-trans border-primary mt-5 m-3 p-3" style="background-color: rgba(255, 255, 255, 0.253)">
+    
+    {% if project %}
+    <h2 class="m-3 text-danger fw-bolder">Remove WO Bill Of Quantities of project:{{project.project_name}}</h2>
+    <div class="card-body bg-light border border-danger">
+        <h4 class="m-3">By deleting the uploaded BoQ, you are destroying all items uploaded .</h4>
+        <h4 class="m-3 text-danger">All the data related to this Boq will be lost forever including bills created till now.</h4>
+        <h4 class="m-3 text-danger">You cannot retrive the lost data.</h4>
+        <h4 class="m-3">Click <b>Yes</b> to confirm Boq deletion or click <b>No</b> to cancel</h2>
+        <a href="{% url 'project:ConfirmRemoveBOQ' project.id %}" class="btn text-danger btn-custom m-2">Yes</a>               
+        <a href="{% url 'project:ManageBOQ' 1 %}"  class="btn btn-custom m-2" >No</a>
+            
+    </div>
+    {% else %}
+        <h2 class="m-3">Removed WO Bill Of Quantities of project</h2>
+        <h4 class="m-3">Click OK to go to Dashboard and upload new BoQ excel.</h4>
+        <a href="{% url 'project:Dashboard' %}"  class="btn btn-custom m-2" >OK</a>        
+    {% endif %}
+</div>
+       
+{% endblock %}

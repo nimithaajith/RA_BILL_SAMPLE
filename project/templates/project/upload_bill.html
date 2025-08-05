@@ -1,0 +1,55 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+
+<div class="card bg-light border-primary mt-5 mx-4 p-5" >
+    
+    <h2 class="form-heading fw-bolder m-3" id="status">Uploading.......Please wait....</h2>
+    <p class="text-dark fw-bolder">* Time to complete file upload depends on the file size.</p>
+
+    <a href="{% url 'project:Dashboard' %}" id="homelink" class="btn btn-custom w-25" style="visibility: hidden;">OK</a>
+    <a href="{% url 'project:CreateBill' %}" id="billlink" class="btn btn-custom w-25" style="visibility: hidden;">Create Next Bill</a>
+</div>   
+
+{% endblock %}
+{% block scripts %}
+    {{ block.super }} 
+    <script>
+      
+      var taskId = "{{ task_id }}";
+      document.addEventListener("DOMContentLoaded", function() {
+        console.log("Task ID found!");
+        console.log("taskId"); 
+        checkTaskStatus(taskId);   
+        
+      });
+      function checkTaskStatus(taskId) {
+            console.log("executed!");
+            $.ajax({
+                url: "{% url 'project:GetBillUploadStatus'%}", 
+                method: 'GET',
+                data: { task_id: taskId }, 
+                success: function (data) {
+                  if (data.status === 'SUCCESS') {
+                          document.getElementById('status').innerHTML = 'Upload complete! Now click <b>Create Next Bill</b>';
+                          document.getElementById('billlink').style.visibility = 'visible';
+
+                        } else if (data.status === 'FAILURE') {
+                              document.getElementById('status').innerHTML = 'Upload failed.....Enter column names correctly in upload form and Try again';
+                              document.getElementById('homelink').style.visibility = 'visible';
+                          }else {
+                              console.log(data.status);
+                              document.getElementById('status').innerHTML = data.status;
+                              setTimeout(() => checkTaskStatus(taskId), 2000);
+
+                        }
+                },
+                error: function () {
+                    alert('Error .');
+                },
+            });
+          }
+    </script>
+{% endblock %}

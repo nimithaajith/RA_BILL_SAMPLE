@@ -1,0 +1,38 @@
+{% extends 'project/base.html' %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+<h3 class="text-light fw-bolder" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);">DOWNLOADS</h3>
+{% if bills %}
+<div class="card-trans border-primary mt-5 mx-4 p-5" style="background-color: rgba(255, 255, 255, 0.253)">
+    <div class="row h-25 bg-light">
+        <h4 class="text-danger fw-bolder">After clicking Download button, please wait for the process to complete. </h4>
+        <h4 class="text-danger fw-bolder"> The time to complete the process Depends on the size of your file.</h4>
+    </div>
+    {% for bill in bills %}
+    <div class="row h-25 bg-light mt-3">
+        <h4>Bill : {{bill.bill_name}} | Project : {{bill.project.project_name}}</h4>
+    </div>
+    <div class="row py-3 bg-light h-25">
+        <div class="col">
+            <a href="{% url 'project:DownloadMBook' bill.id %}" class="btn btn-custom p-2" >DOWNLOAD MEASUREMENT SHEET</a>
+        </div>    
+        <div class="col">
+            <a href="{% url 'project:DownloadAbstract' bill.id %}" class="btn btn-custom p-2" >DOWNLOAD ABSTRACT</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'project:DownloadCOP' bill.id %}" class="btn btn-custom p-2" >DOWNLOAD TAX INVOICE</a>
+        </div>
+    </div>
+    
+    {% endfor %}
+    <div class="row h-25 bg-light mt-3">
+        <h4 class="text-danger fw-bolder">After clicking Download button, please wait for the process to complete. </h4>
+        <h4 class="text-danger fw-bolder"> Time to complete the process Depends on the size of your file.</h4>
+    </div>
+</div>
+{% else %}
+<h1>Nothing to download....</h1>       
+{% endif %}
+
+{% endblock %}

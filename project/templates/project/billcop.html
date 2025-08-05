@@ -1,0 +1,188 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+{% if msg %}
+    <div class="p-3 my-2 bg-light">
+        <h2 class="form-heading text-danger fw-bolder m-3">{{msg}}</h2>
+    </div>    
+{% endif %}
+
+<div class="card border-primary mt-5 mx-4 p-5" style="background-color: rgba(255, 255, 255, 0.253)">                  
+    <div class="row bg-light my-3 p-4">
+      {% if not cop %} 
+        <form class="p-4 text-primary" action="{% url 'project:ManageCOPBill' bill.id %}" enctype="multipart/form-data" id="cop_form" method="POST" >
+            {% csrf_token %}  
+            <div class="row"> 
+                <h2 class="form-heading m-3  ">Add Tax Invoice Details for {{bill.bill_name}}</h2> 
+            </div>            
+           
+            <div class="row my-0 p-3 bg-light">                
+                <div class="col-md-2">
+                  <label for="invoice" class="text-dark">Invoice No.</label>
+                  <input type="text" class="form-control" name="invoice" id="invoice" value="{{cop.invoice_no}}">
+                </div>
+                <div class="col-md-2">
+                  <label for="date_of_bill" class=" px-3 text-dark">Select date of bill</label>
+                  <input type="date" id="date_of_bill" name="date_of_bill" class="form-control mb-3 w-100"  required>                
+              </div> 
+                            
+                <div class="col">
+                    <label for="supply_of_goods" class="px-3 text-dark">Supply of Goods</label>
+                    <input type="checkbox" value="true" class="" name="supply_of_goods" id="supply_of_goods" >
+                </div>
+                <div class="col">
+                  <label for="supply_of_services" class="px-3 text-dark">Supply of Services</label>
+                  <input type="checkbox" value="true" class="" name="supply_of_services" id="supply_of_services" >
+                </div>
+                <div class="col">
+                  <label for="stock_transfer" class="px-3 text-dark">Stock Transfer</label>
+                  <input type="checkbox" value="true" class="" name="stock_transfer" id="stock_transfer" >
+                </div>
+                <div class="col-md-2">
+                  <label for="debit_credit_notes" class="px-3 text-dark">Debit notes & Credit notes</label>
+                  <input type="checkbox" value="true" class="" name="debit_credit_notes" id="debit_credit_notes" >
+                </div>
+                <div class="col">
+                  <label for="other_supplies" class="px-3 text-dark">Other Supplies</label>
+                  <input type="checkbox" value="true" class="" name="other_supplies" id="other_supplies" >
+                </div>
+              </div> 
+              <div class="row bg-light p-4">
+                  <h4 class="align-items-center">Tax Details</h4>
+                  
+                  <div class="col-md-4 mb-3 px-4">
+                    <label for="gst_inclusive" class="px-3 text-dark">GST inclusive</label>
+                    <input type="checkbox" value="true" class="" name="gst_inclusive" id="gst_inclusive" >
+                  </div>
+              </div>
+              <div class="row bg-light">
+                  <div class="col">                  
+                    <label for="sgst" class="px-3 text-dark">SGST</label>
+                    <input type="number" value="0" class="form-control" name="sgst" id="sgst" >
+                  </div>
+                  <div class="col mb-3 px-4">
+                    <label for="cgst" class="px-3 text-dark">CGST</label>
+                    <input type="number" value="0" class="form-control" name="cgst" id="cgst" >
+                  </div>
+                  <div class="col mb-3 px-4">
+                    <label for="igst" class="px-3 text-dark">IGST</label>
+                    <input type="number" value="0" class="form-control" name="igst" id="igst" >
+                  </div>
+                  <div class="col mb-3 px-4">
+                    <label for="ugst" class="px-3 text-dark">UGST</label>
+                    <input type="number" value="0" class="form-control" name="ugst" id="ugst" >
+                  </div>
+              </div>              
+              <div class="row  my-3 pb-3 bg-light">
+                  <center>
+                      <input type="submit" id="savecopbill" class="btn form-btn-custom w-75" value="Save Details">
+                  </center>                
+              </div>   
+        </form> 
+      {% endif %}
+      {% if cop %}
+        <form class="p-4 text-primary" action="{% url 'project:ManageCOPBill' bill.id %}" enctype="multipart/form-data" id="cop_form" method="POST" >
+          {% csrf_token %}  
+          <div class="row"> 
+              <h2 class="form-heading m-3  ">Edit Tax Invoice Details for {{bill.bill_name}}</h2> 
+          </div>            
+        
+          <div class="row my-0 p-3 bg-light">                
+              <div class="col-md-2">
+                <label for="invoice" class="text-dark">Invoice No.</label>
+                <input type="text" class="form-control" name="invoice" id="invoice" value="{{cop.invoice_no}}">
+              </div>
+              <div class="col-md-2">
+                <label for="date_of_bill" class=" px-3 text-dark">Date of bill {{cop.date_of_bill}}</label>
+                <input type="date" id="date_of_bill" name="date_of_bill" class="form-control mb-3 w-100" value="{{cop.date_of_bill}}"  >                
+            </div> 
+                          
+              <div class="col">
+                  <label for="supply_of_goods" class="px-3 text-dark">Supply of Goods</label>
+                  {% if cop.supply_of_goods %}
+                    <input type="checkbox" value="true" class="" name="supply_of_goods" id="supply_of_goods" checked>
+                  {% else %}
+                    <input type="checkbox" value="true" class="" name="supply_of_goods" id="supply_of_goods">
+                  {% endif %}
+                </div>
+              <div class="col">
+                <label for="supply_of_services" class="px-3 text-dark">Supply of Services</label>
+                {% if cop.supply_of_services %}
+                    <input type="checkbox" value="true" class="" name="supply_of_services" id="supply_of_services" checked>
+                {% else %}
+                    <input type="checkbox" value="true" class="" name="supply_of_services" id="supply_of_services" >
+                {% endif %}              
+              </div>
+              <div class="col">
+                <label for="stock_transfer" class="px-3 text-dark">Stock Transfer</label>
+                {% if cop.stock_transfer %}
+                    <input type="checkbox" value="true" class="" name="stock_transfer" id="stock_transfer" checked>
+                {% else %}
+                    <input type="checkbox" value="true" class="" name="stock_transfer" id="stock_transfer" >
+                {% endif %}                  
+              </div>
+              <div class="col-md-2">
+                <label for="debit_credit_notes" class="px-3 text-dark">Debit notes & Credit notes</label>
+                {% if cop.debit_credit_notes %}
+                    <input type="checkbox" value="true" class="" name="debit_credit_notes" id="debit_credit_notes" checked>
+                {% else %}
+                    <input type="checkbox" value="true" class="" name="debit_credit_notes" id="debit_credit_notes" >
+                {% endif %}                
+              </div>
+              <div class="col">
+                <label for="other_supplies" class="px-3 text-dark">Other Supplies</label>
+                {% if cop.debit_credit_notes %}
+                    <input type="checkbox" value="true" class="" name="other_supplies" id="other_supplies" checked>
+                {% else %}
+                    <input type="checkbox" value="true" class="" name="other_supplies" id="other_supplies" >
+                {% endif %}          
+              </div>
+            </div> 
+            <div class="row bg-light p-4">
+                <h4 class="align-items-center">Tax Details</h4>
+                
+                <div class="col-md-4 mb-3 px-4">
+                  <label for="gst_inclusive" class="px-3 text-dark">GST inclusive</label>
+                  {% if cop.gst_inclusive %}
+                    <input type="checkbox" value="true" class="" name="gst_inclusive" id="gst_inclusive" checked>
+                  {% else %}
+                      <input type="checkbox" value="true" class="" name="gst_inclusive" id="gst_inclusive" >
+                  {% endif %}                   
+                </div>
+            </div>
+            <div class="row bg-light">
+                <div class="col">                  
+                  <label for="sgst" class="px-3 text-dark">SGST</label>
+                  <input type="number" class="form-control" name="sgst" id="sgst" value="{{cop.sgst}}">
+                </div>
+                <div class="col mb-3 px-4">
+                  <label for="cgst" class="px-3 text-dark">CGST</label>
+                  <input type="number" class="form-control" name="cgst" id="cgst" value="{{cop.cgst}}">
+                </div>
+                <div class="col mb-3 px-4">
+                  <label for="igst" class="px-3 text-dark">IGST</label>
+                  <input type="number" class="form-control" name="igst" id="igst" value="{{cop.igst}}">
+                </div>
+                <div class="col mb-3 px-4">
+                  <label for="ugst" class="px-3 text-dark">UGST</label>
+                  <input type="number" class="form-control" name="ugst" id="ugst" value="{{cop.ugst}}">
+                </div>
+            </div>              
+            <div class="row  my-3 pb-3 bg-light">
+                <div class="col">
+                  <input type="submit" id="savecopbill" class="btn form-btn-custom w-75" value="Save Details">
+                </div>
+                <div class="col">
+                  <a href="{% url 'project:DownloadCOP' bill.id %}" class="btn form-btn-custom w-75">Cancel</a>
+                </div>
+                    
+                               
+            </div>   
+        </form> 
+      {% endif %}       
+    </div>
+  
+</div>
+{% endblock %}

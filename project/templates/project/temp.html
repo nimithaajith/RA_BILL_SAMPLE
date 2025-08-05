@@ -1,0 +1,33 @@
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block scriptcontent %}
+
+  
+      
+{% endblock %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+
+<div class="card border-primary mt-5 mx-4 p-5" style="background-color: rgba(255, 255, 255, 0.253)">
+    {% if status == 'success' %}
+    <h2 class="text-primary m-3" id="status">Uploading completed.</h2>
+    <a href="{% url 'project:Dashboard' %}" class="btn btn-custom w-25 my-3" >Manage BoQ</a>
+    <a href="{% url 'project:CreateBill' %}" class="btn form-btn-custom my-3 w-25">Create New Bill</a> 
+    <i class='fas fa-file-export' style='font-size:48px;color:green'></i>
+    <hr>
+            <h5>1. Click <b>Manage BoQ</b> to view and verify the contents of BoQ or to edit the entries of BoQ.</h5></br>
+            <h5>2.Click <b>Create New Bill</b> to create your bill and to add measurements to items. </h5></br>
+    {% else %}
+    <h2 class="text-danger m-3" id="status">Uploading failed.Error::{{status}}</h2>
+    
+    <a href="{% url 'project:Dashboard' %}" class="btn btn-custom w-25" >OK</a>
+    <i class='fas fa-exclamation-triangle' style='font-size:48px;color:red'></i>
+            <hr>
+            <h5>1. Please correct the errors and try again to upload.</h5></br>
+            <h5>2.To upload again ,Click <b>OK</b> . </h5></br>
+    {% endif %}
+</div>   
+
+{% endblock %}

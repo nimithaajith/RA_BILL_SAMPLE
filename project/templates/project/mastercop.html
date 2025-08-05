@@ -1,0 +1,270 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+{% if msg %}
+    <div class="p-3 my-2 bg-light">
+        <h2 class="form-heading text-danger fw-bolder m-3">{{msg}}</h2>
+    </div>    
+{% endif %}
+{% if bill and not copmaster %} 
+<div class="card border border-primary mt-5 mx-4 p-5" style="background-color: rgba(255, 255, 255, 0.253)">                  
+      <div class="row bg-light my-3 p-4">
+        <form class="p-4 text-primary" action="{% url 'project:ManageCOPMaster' bill.id %}" enctype="multipart/form-data" id="cop_form" method="POST" >
+            {% csrf_token %}  
+            <div class="row"> 
+                <h2 class="form-heading m-3  ">Add Project Tax Invoice Details</h2> 
+            </div>
+            <div class="border border-primary px-3">
+              <h3>THE CONSIGNEE</h3> 
+                <div class="row my-0 p-3 bg-light">
+                  <div class="col">
+                    <label for="company" class=" px-3 text-dark">Name</label>
+                    <input type="text" class="form-control mb-3 w-100"  name="company" id="company" value="{{company.company_name}}" required>
+                  </div>
+                  <div class="col">
+                    <label for="address" class="px-3 text-dark">Address</label>
+                    <input type="text" class="form-control mb-3" name="address" id="address" required>
+                  </div> 
+                  <div class="col">
+                    <label for="state" class="px-3 text-dark">State</label>
+                    <input type="text" class="form-control mb-3" name="state" id="state" required>
+                  </div> 
+
+                </div> 
+                <div class="row my-0 p-3 bg-light">
+                    <div class="col">
+                        <label for="phone" class=" px-3 text-dark">Phone Number</label>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <input type="text" class="form-control mb-3"  name="country_code" id="country_code" value="{{company.country_code}}" required>
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" class="form-control  mb-3"  name="phone" id="phone" value="{{company.company_phone}}" required>
+                          </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="col">
+                        <label for="email" class="px-3 text-dark">Email</label>
+                        <input type="email" class="form-control mb-3" name="email" id="email" value="{{company.company_email}}" required>
+                    </div>
+                    
+                    <div class="col">
+                      <label for="logo_image" class="px-3 text-dark">Logo <small class="ms-3 p-2" style="color: rgb(224, 27, 27);font-weight: bolder;">Upload logo as .png image</small></label>
+                      <input type="file" class="form-control mb-3" name="logo_image" id="logo_image">
+                    </div> 
+                    <div class="col">
+                      <label for="gst" class="px-3 text-dark">GSTIN No.</label>
+                      <input type="text" class="form-control mb-3" name="gst" id="gst" value="{{cop.gst_no}}">
+                    </div>              
+                </div>               
+                
+                <div class="row my-0 p-3 bg-light">
+                    <h4>Shipped to - Bank Details:</h4>
+                    <div class="col">
+                        <label for="bankname" class="px-3 text-dark">Bank Name</label>
+                        <input type="text" class="form-control mb-3" name="bankname" id="bankname" value="{{cop.receiver_bank}}">
+                    </div>                  
+                    <div class="col">
+                        <label for="ifsc" class="px-3 text-dark">IFSC Code</label>
+                        <input type="text" class="form-control mb-3" name="ifsc" id="ifsc" value="{{cop.receiver_ifsc}}">
+                    </div>
+                    <div class="col">
+                        <label for="branchcode" class="px-3 text-dark">Branch Code</label>
+                        <input type="text" class="form-control mb-3" name="branchcode" id="branchcode" value="{{cop.receiver_branch}}">
+                    </div>
+                    <div class="col">
+                        <label for="acno" class="px-3 text-dark">Account No.</label>
+                        <input type="text" class="form-control mb-3" name="acno" id="acno" value="{{cop.receiver_acno}}">
+                    </div>
+                </div> 
+            </div> 
+            <div class="border border-primary px-3 my-3">  
+              <h3>THE RECEIVER</h3>            
+                <div class="row my-0 p-3 bg-light">                    
+                    <div class="col-md-3">                  
+                        <label for="receiver" class="px-3 text-dark">Name</label>
+                        <input type="text" class="form-control mb-3" name="receiver" id="receiver" value="{{cop.receiver_name}}">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="r_address" class="px-3 text-dark">Address</label>
+                      <input type="text" class="form-control mb-3" name="r_address" id="r_address" value="{{cop.receiver_address}}">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="r_gst" class="px-3 text-dark">GSTIN No.</label>
+                        <input type="text" class="form-control mb-3" name="r_gst" id="r_gst" value="{{cop.receiver_gst}}">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="r_state" class="px-3 text-dark">State</label>
+                      <input type="text" class="form-control mb-3" name="r_state" id="r_state">
+                    </div>
+                    <div class="col-md-1">
+                      <label for="code" class="px-3 text-dark">Code</label>
+                      <input type="text" class="form-control mb-3" name="code" id="code" >
+                    </div>
+                  </div> 
+            </div>
+            <div class="border border-primary px-3 my-3">
+                <div class="row my-0 p-3 bg-light">
+                  <div class="col">                  
+                    <label for="order_acceptance_no" class="px-3 text-dark">Order Acceptance No</label>
+                    <input type="text" class="form-control mb-3" name="order_acceptance_no" id="order_acceptance_no" required>
+                  </div>
+                  <div class="col">
+                    <label for="terms_of_payment" class="px-3 text-dark">Terms Of Payment</label>
+                    <input type="text" class="form-control mb-3" name="terms_of_payment" id="terms_of_payment" required>
+                  </div>
+                  <div class="col">                  
+                    <label for="hsn_sa_code" class="px-3 text-dark">HSN SA Code </label>
+                    <input type="text" class="form-control mb-3" name="hsn_sa_code" id="hsn_sa_code" required>
+                  </div>
+                  <div class="col">
+                    <label for="uom" class="px-3 text-dark">UOM</label>
+                    <input type="text" class="form-control mb-3" name="uom" id="uom" required>
+                  </div>
+                </div> 
+            </div>              
+            <div class="row  my-0 pb-3 bg-light">
+                <center>
+                    <input type="submit" id="savecop" class="btn form-btn-custom w-75" value="Save Tax Invoice Details">
+                </center>                
+            </div>   
+        </form>        
+    </div>
+</div>
+{% endif %}
+{% if bill and copmaster %} 
+<div class="card border border-primary mt-5 mx-4 p-5" style="background-color: rgba(255, 255, 255, 0.253)">                  
+      <div class="row bg-light my-3 p-4">
+        <form class="p-4 text-primary" action="{% url 'project:ManageCOPMaster' bill.id %}" enctype="multipart/form-data" id="cop_form" method="POST" >
+            {% csrf_token %}  
+            <div class="row"> 
+                <h2 class="form-heading m-3  ">Edit Project Tax Invoice Details</h2> 
+            </div>
+            <div class="border border-primary px-3">
+              <h3>THE CONSIGNEE</h3> 
+                <div class="row my-0 p-3 bg-light">
+                  <div class="col">
+                    <label for="company" class=" px-3 text-dark">Name</label>
+                    <input type="text" class="form-control mb-3 w-100"  name="company" id="company" value="{{company.company_name}}" required>
+                  </div>
+                  <div class="col">
+                    <label for="address" class="px-3 text-dark">Address</label>
+                    <input type="text" class="form-control mb-3" name="address" id="address" value="{{company.company_address}}" required>
+                  </div> 
+                  <div class="col">
+                    <label for="state" class="px-3 text-dark">State</label>
+                    <input type="text" class="form-control mb-3" name="state" id="state" value="{{copmaster.state}}" required>
+                  </div> 
+
+                </div> 
+                <div class="row my-0 p-3 bg-light">
+                    <div class="col">
+                        <label for="phone" class=" px-3 text-dark">Phone Number</label>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <input type="text" class="form-control mb-3"  name="country_code" id="country_code" value="{{company.country_code}}" required>
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" class="form-control  mb-3"  name="phone" id="phone" value="{{company.company_phone}}" required>
+                          </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="col">
+                        <label for="email" class="px-3 text-dark">Email</label>
+                        <input type="email" class="form-control mb-3" name="email" id="email" value="{{company.company_email}}" required>
+                    </div>
+                    
+                    <div class="col">
+                      <label for="logo_image" class="px-3 text-dark">Logo <small class="ms-3 p-2" style="color: rgb(224, 27, 27);font-weight: bolder;">Upload logo as .png image</small></label>
+                      <input type="file" class="form-control mb-3" name="logo_image" id="logo_image">
+                    </div> 
+                    <div class="col">
+                      <label for="gst" class="px-3 text-dark">GSTIN No.</label>
+                      <input type="text" class="form-control mb-3" name="gst" id="gst" value="{{copmaster.gst_no}}">
+                    </div>              
+                </div>               
+                
+                <div class="row my-0 p-3 bg-light">
+                    <h4>Shipped to - Bank Details:</h4>
+                    <div class="col">
+                        <label for="bankname" class="px-3 text-dark">Bank Name</label>
+                        <input type="text" class="form-control mb-3" name="bankname" id="bankname" value="{{copmaster.bank}}">
+                    </div>                  
+                    <div class="col">
+                        <label for="ifsc" class="px-3 text-dark">IFSC Code</label>
+                        <input type="text" class="form-control mb-3" name="ifsc" id="ifsc" value="{{copmaster.ifsc}}">
+                    </div>
+                    <div class="col">
+                        <label for="branchcode" class="px-3 text-dark">Branch Code</label>
+                        <input type="text" class="form-control mb-3" name="branchcode" id="branchcode" value="{{copmaster.branch}}">
+                    </div>
+                    <div class="col">
+                        <label for="acno" class="px-3 text-dark">Account No.</label>
+                        <input type="text" class="form-control mb-3" name="acno" id="acno" value="{{copmaster.acno}}">
+                    </div>
+                </div> 
+            </div> 
+            <div class="border border-primary px-3 my-3">  
+              <h3>THE RECEIVER</h3>            
+                <div class="row my-0 p-3 bg-light">                    
+                    <div class="col-md-3">                  
+                        <label for="receiver" class="px-3 text-dark">Name</label>
+                        <input type="text" class="form-control mb-3" name="receiver" id="receiver" value="{{copmaster.receiver_name}}">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="r_address" class="px-3 text-dark">Address</label>
+                      <input type="text" class="form-control mb-3" name="r_address" id="r_address" value="{{copmaster.receiver_address}}">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="r_gst" class="px-3 text-dark">GSTIN No.</label>
+                        <input type="text" class="form-control mb-3" name="r_gst" id="r_gst" value="{{copmaster.receiver_gst_no}}">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="r_state" class="px-3 text-dark">State</label>
+                      <input type="text" class="form-control mb-3" name="r_state" id="r_state" value="{{copmaster.receiver_state}}">
+                    </div>
+                    <div class="col-md-1">
+                      <label for="code" class="px-3 text-dark">Code</label>
+                      <input type="text" class="form-control mb-3" name="code" id="code" value="{{copmaster.receiver_code}}">
+                    </div>
+                  </div> 
+            </div>
+            <div class="border border-primary px-3 my-3">
+                <div class="row my-0 p-3 bg-light">
+                  <div class="col">                  
+                    <label for="order_acceptance_no" class="px-3 text-dark">Order Acceptance No</label>
+                    <input type="text" class="form-control mb-3" name="order_acceptance_no" id="order_acceptance_no" value="{{copmaster.order_acceptance_no}}" required>
+                  </div>
+                  <div class="col">
+                    <label for="terms_of_payment" class="px-3 text-dark">Terms Of Payment</label>
+                    <input type="text" class="form-control mb-3" name="terms_of_payment" id="terms_of_payment" value="{{copmaster.terms_of_payment}}" required>
+                  </div>
+                  <div class="col">                  
+                    <label for="hsn_sa_code" class="px-3 text-dark">HSN SA Code </label>
+                    <input type="text" class="form-control mb-3" name="hsn_sa_code" id="hsn_sa_code" value="{{copmaster.hsn_sa_code}}" required>
+                  </div>
+                  <div class="col">
+                    <label for="uom" class="px-3 text-dark">UOM</label>
+                    <input type="text" class="form-control mb-3" name="uom" id="uom" value="{{copmaster.uom}}" required>
+                  </div>
+                </div> 
+            </div>              
+            <div class="row  my-0 pb-3 bg-light">
+                <div class="col">
+                  <input type="submit" id="savecop" class="btn form-btn-custom w-75" value="Save Project Tax Invoice Details">
+                </div>                    
+                <div class="col">
+                  <a href="{% url 'project:DownloadCOP' bill.id %}" class="btn form-btn-custom w-75">Cancel</a>
+                </div>                                        
+            </div>   
+        </form>        
+    </div>
+</div>
+{% endif %}
+{% endblock %}

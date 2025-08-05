@@ -1,0 +1,50 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block scriptcontent %}
+
+      
+{% endblock %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+
+<h3 class="text-light fw-bolder" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);">PROJECT : PREVIOUS BILLS</h3>
+{% if msg %}
+    <div class="card mt-3" >
+        <h2 class="form-heading bg-light text-danger fw-bolder m-3" style="width: fit-content;">{{msg}}</h2>
+    </div>
+{% endif %}   
+         
+        
+{% if bills %}
+<center>
+    <div class="row w-50 mt-4 border border-primary rounded" style="background-color: rgba(255, 255, 255, 0.253)">
+          <h4 class="text-primary bg-dark p-3">Previous Bills</h4>
+          <div class="table-responsive">
+            <table class="table bg-light my-3 w-100">
+                <thead>
+                  <tr>
+                    <th scope="col">Count</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for bill in bills %}
+                  <tr>
+                    <th scope="row">{{bill.bill_number}}</th>
+                    <td>{{bill.bill_name}}</td>
+                    <td>{{bill.bill_date}}</td>
+                    <td><a href="{% url 'project:PreviousBill' bill.id 1 %}" >Manage</a></td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+          </div>
+      </div>      
+  </center> 
+{% endif %}  
+
+{% endblock %}

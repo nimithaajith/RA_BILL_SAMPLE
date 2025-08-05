@@ -1,0 +1,253 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block scriptcontent %}
+<script src="{% static 'project/js/current_bill.js' %}"></script>   
+      
+{% endblock %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+
+<div class="card-trans" >
+    {% if msg %}
+    <h2 class="form-heading bg-light text-danger fw-bolder m-3">{{msg}}</h2>
+    {% endif %}    
+</div>            
+        
+{% if current_bill %}    
+{% if page_object %}
+<div class="card-trans border-primary mt-5 m-3 p-3" style="background-color: rgba(255, 255, 255, 0.253)">
+    <center>
+        <h2 class="m-3 fw-bold">Active Bill Details </h2>
+    </center>
+    <div class="row">        
+        <div class="col">            
+            <h4 class="fw-bold ms-3">Bill Count :{{ current_bill.bill_number }} </h4>          
+        </div>
+        <div class="col">
+            <h4 class="fw-bold">Bill Name :{{ current_bill.bill_name }} </h4>                    
+        </div>
+        <div class="col">
+            <h4 class="fw-bold">Bill Date :{{ current_bill.bill_date }} </h4>              
+        </div>
+        <div class="col">
+            <a href="{% url 'project:SaveCurrentBill' %}" class="btn btn-custom">Finish/Submit Bill</a>              
+        </div>
+    </div>
+    <div class="row m-3">{{current_bill.other_details}}</div>
+    <div class="inline-items ">
+        <span class="mx-2 bg-dark text-light p-3 fw-bold">Total Pages : {{page_object.paginator.num_pages}} (Showing 20 items per page)</span>
+        {% if page_object.has_previous %}
+            <a href="{% url 'project:CurrentBill' page_object.number|add:'-1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-reply text-primary py-2"></i></a> 
+        {% endif %}
+        <span class="mx-2 bg-dark text-light p-3"><b>Current Page : {{page_object.number}}</b></span>
+        {% if page_object.has_next %}
+            <a href="{% url 'project:CurrentBill' page_object.number|add:'1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-share text-primary py-2"></i></a> 
+        {% endif %}
+        <span class="ms-5">  
+            <small style="font-size: 15px;font-weight: bold;color: orangered;">*Extra items in BoQ will be marked with <i class="fas fa-plus p-2" style="color: rgb(255, 0, 55);font-size:20px;"></i> symbol</small>          
+            <!-- <form id="phonesearchfrm" action="{% url 'projectadmin:SearchProjects' %}" method="post">
+            {% csrf_token %}
+                <div class="input-group inline text-primary border-0" >                    
+                    <input type="search" id="searchproject"  name="searchproject" class="inline fw-bold w-auto bg-dark text-primary border border-0 px-5" placeholder="Enter project username">
+                    <button type="submit" class="btn  btn-custom text-primary rounded-circle ms-1 "><i class="fa fa-search py-2" aria-hidden="true"></i></button>
+                </div>
+            </form>
+            <small style="font-size: 15px;font-weight: bold;color: orangered;">*Search project by registered username</small>
+             -->
+        </span> 
+    </div>
+    
+    <table class="table table-bordered bg-light border-primary m-2 p-3 shadow-lg" name="billtable" id="billtable" style="max-width: 95%;font-weight: bold;">
+        <thead class="bg-dark text-light">
+            <tr>
+                <th scope="col">DATE</th> 
+                <th scope="col">SERIAL NO</th>
+                <th scope="col">ITEM DESCRIPTION</th>                                         
+                <th scope="col">ADD MEASUREMENTS</th>
+            </tr>
+        </thead>
+        <tbody >
+            ===========
+            {% for object in page_object %}
+                {% if not object.extra_item %}
+                    {% if object.heading %}
+                        <tr>                                 
+                            <td class="text-primary fw-bolder">{{object.serial_no}}</td>
+                            <td class="text-primary fw-bolder">{{object.description}}</td>                                                         
+                        </tr>
+                    {% else %}                        
+                        <tr >
+                            <th scope="row">{{object.work_order_date}}</th>
+                            <td>{{object.serial_no}}</td>
+                            <td >{{object.description}}</td>
+                            <td>{{object.quantity}}</td>
+                            <td>{{object.rate}}</td>
+                            <td>{{object.unit}}</td>
+                            <td>{{object.amount}}</td>     
+                            
+                            <td>
+                                <a href="{% url 'project:ManageItem' object.id %}" class="btn btn-custom m-1 rounded-circle">
+                                <i class="fas fa-eye py-2" style="color: blue;font-size:20px;"></i></a>
+                            </td>                
+                        
+                        </tr>
+                    {% endif %}
+                {% else %}
+                    {% if object.subheading %} 
+                        <tr >
+                            <td></td>
+                            {% with object.subheading|split:"&&&" as parts %}
+                            <td class="text-primary fw-bolder">{{ parts.0 }}</td>
+                            <td class="text-primary fw-bolder">{{ parts.1 }}</td>
+                            {% endwith %}
+                        </tr>        
+                    {% endif %}
+                    <tr >
+                        <th scope="row">{{object.work_order_date}}</th>
+                        <td>{{object.serial_no}}</td>
+                        <td ><i class="fas fa-plus p-2" style="color: rgb(255, 0, 55);font-size:20px;"></i>{{object.description}}</td>
+                        <td>{{object.quantity}}</td>
+                        <td>{{object.rate}}</td>
+                        <td>{{object.unit}}</td>
+                        <td>{{object.amount}}</td>     
+                        
+                        <td>
+                            <a href="{% url 'project:ManageItem' object.id %}" class="btn btn-custom m-1 rounded-circle">
+                            <i class="fas fa-eye py-2" style="color: blue;font-size:20px;"></i></a>
+                        </td>
+                        
+                        <!-- <td>
+                            <a href="" class="btn btn-custom m-1 rounded-circle">
+                            <i class='fas fa-trash py-2' style='color:red;font-size:20px;'></i></a>
+                        </td> -->
+                    </tr>                    
+                {% endif %}
+            {% endfor %}
+            ============
+            {% if subheading_exists %}
+            {% for heading in subheading_list %}
+            <tr >
+                <td></td>
+                {% with heading|split:"&&&" as parts %}
+                    <td class="text-primary fw-bolder">{{ parts.0 }}</td>
+                    <td class="text-primary fw-bolder">{{ parts.1 }}</td>
+                {% endwith %}
+            </tr>
+            {% for object in page_object %}
+                {% if object.subheading == heading and not object.extra_item %}
+                    {% if object.headings %}
+                        <script>
+                            deleteLastRow();
+                        </script>
+                    
+                        {% with object.headings|split:"|||" as hlist %}
+                            {% for h in hlist %}
+                                <tr >
+                                    <td></td>
+                                    {% with h|split:"&&&" as parts %}
+                                    <td class="text-primary fw-bolder">{{ parts.0 }}</td>
+                                    <td class="text-primary fw-bolder">{{ parts.1 }}</td>
+                                    {% endwith %}                          
+                                    
+                                </tr>
+                            {% endfor %}
+                        {% endwith %}
+                        <tr >
+                            <td></td>
+                            {% with heading|split:"&&&" as parts %}
+                            <td class="text-primary fw-bolder">{{ parts.0 }}</td>
+                            <td class="text-primary fw-bolder">{{ parts.1 }}</td>
+                            {% endwith %}                           
+                        </tr>
+                    {% endif %}
+                    <tr >
+                        <th scope="row">{{object.work_order_date}}</th>
+                        <td>{{object.serial_no}}</td>
+                        <td >{{object.description}}</td>                
+                        
+                        <td>
+                            <a href="{% url 'project:Measurements' object.id 1 %}" class="btn btn-custom m-1 rounded-circle">
+                            <i class="fas fa-plus py-2" style="color: blue;font-size:20px;"></i></a>
+                        </td>
+                        
+                        <!-- <td>
+                            <a href="" class="btn btn-custom m-1 rounded-circle">
+                            <i class='fas fa-trash py-2' style='color:red;font-size:20px;'></i></a>
+                        </td> -->
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            {% endfor %}
+            {% endif %}
+            {% for object in page_object %}
+            {% if not object.extra_item and not object.subheading %}
+            <tr >
+                <th scope="row">{{object.work_order_date}}</th>
+                <td>{{object.serial_no}}</td>
+                <td >{{object.description}}</td>                
+                <td>
+                    <a href="{% url 'project:Measurements' object.id 1 %}" class="btn btn-custom m-1 rounded-circle">
+                    <i class="fas fa-plus py-2" style="color: blue;font-size:20px;"></i></a>
+                </td>                
+            </tr>
+            {% endif %}
+            {% endfor %}
+            
+
+<!-- extra added items displayed at the end of boq -->
+            {% if extra_subheading_list %}
+                {% for eheading in extra_subheading_list %}
+                <tr >
+                    <td></td>
+                    {% with eheading|split:"&&&" as parts %}
+                    <td class="text-primary fw-bolder">{{ parts.0 }}</td>
+                    <td class="text-primary fw-bolder">{{ parts.1 }}</td>
+                    {% endwith %}
+                </tr>  
+                {% for object in page_object %}
+                    {% if object.subheading == eheading and object.extra_item  %}
+                    <tr >
+                        <th scope="row">{{object.work_order_date}}</th>
+                        <td>{{object.serial_no}}</td>
+                        <td ><i class="fas fa-plus p-2" style="color: rgb(255, 0, 55);font-size:20px;"></i>{{object.description}}</td>
+                    
+                        <td>
+                            <a href="{% url 'project:Measurements' object.id 1 %}" class="btn btn-custom m-1 rounded-circle">
+                            <i class="fas fa-plus py-2" style="color: blue;font-size:20px;"></i></a>
+                        </td>
+                        
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+
+                {% endfor %}
+            {% endif %}
+            {% for object in page_object %}
+                {% if object.extra_item and not object.subheading %}
+                <tr >
+                    <th scope="row">{{object.work_order_date}}</th>
+                        <td>{{object.serial_no}}</td>
+                        <td ><i class="fas fa-plus p-2" style="color: rgb(255, 0, 55);font-size:20px;"></i>{{object.description}}</td>
+                    
+                        <td>
+                            <a href="{% url 'project:Measurements' object.id 1 %}" class="btn btn-custom m-1 rounded-circle">
+                            <i class="fas fa-plus py-2" style="color: blue;font-size:20px;"></i></a>
+                        </td>
+                        
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+
+        </tbody>
+    </table>
+    <span class="ms-5">  
+        <small style="font-size: 15px;font-weight: bold;color: orangered;">*Extra items in BoQ will be marked with <i class="fas fa-plus p-2" style="color: rgb(255, 0, 55);font-size:20px;"></i> symbol</small>          
+        
+    </span> 
+</div>
+    
+{% endif %}
+{% endif %}     
+{% endblock %}

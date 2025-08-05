@@ -1,0 +1,67 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% block navcontent %}
+
+      
+{% endblock %}
+{% block maincontent %}
+{% if msg %}
+<div class="card border-primary mt-5 m-3 p-3" style="background-color: rgba(255, 255, 255, 0.253)">
+    
+    <h2 class="m-3 text-danger"> {{msg}}</h2>
+       
+</div>
+{% endif %}
+<center>
+    <div class="card-trans border-primary mt-5 m-3 p-3 w-50" style="background-color: rgba(255, 255, 255, 0.253);min-width: 300px;">
+        <div class="card-header bg-dark">
+            <h2 class="m-3 text-primary">Add Project Owner</h2> 
+        </div>
+        <div class="card-body bg-light border border-primary">
+            <form action="{% url 'project:AddOwner'  %}" method="post">
+                {% csrf_token %}
+                <div class="m-2">
+                    <label class="w-25" for="name">Name </label>
+                    <input class="w-50" type="text" name="name" id="name"> 
+                </div>
+                <div class="m-2 mb-0 pb-0">
+                    <label class="w-25" for="emailid">Email </label>
+                    <input class="w-50" type="text" name="emailid" id="emailid"> 
+                    
+                </div>
+                <p class="mt-0 pt-0"><small style="font-size: 15px;font-weight: bold;color: orangered;">*Enter valid email id</small></p>
+                <div class="m-2">
+                    <label class="w-25">Username </label>
+                    <input class="w-50" type="username" name="username">
+                </div>      
+                <div class="m-2">
+                    <label class="w-25">Password </label>
+                    <input class="w-50" type="password" name="password">
+                </div>
+                <div class="m-2">
+                    <label class="w-25">Confirm Password </label>
+                    <input class="w-50" type="password" name="confirmpassword">
+                </div> 
+                <div class="m-2">
+                    <label class="w-25">Owner's Address </label>
+                    <input class="w-50" type="text" name="addrs">
+                </div>
+                <div class="m-2">
+                    <label class="w-25" for="phone">Phone Number</label>
+                    <select class="w-25" id="country-code" name="country-code" required>
+                        <option value="+91" selected>India (+91)</option>
+                        <option value="+1">USA (+1)</option>
+                        <option value="+44">UK (+44)</option>                        
+                        <option value="+61">Australia (+61)</option>
+                        <option value="+81">Japan (+81)</option>                    
+                    </select>
+                    <input class="w-25" type="tel" id="phone" name="phone" placeholder="Enter phone number" required/>
+                </div>             
+
+                <input type="submit" class="btn btn-custom m-5" value=" + Add Owner">
+            </form>
+        </div>
+    </div>
+</center>
+       
+{% endblock %}

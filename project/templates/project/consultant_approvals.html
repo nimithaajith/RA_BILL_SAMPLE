@@ -1,0 +1,230 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}   
+    
+
+{% if item %} 
+<div class="card mt-2" > 
+    <div class="row">
+        {% if bill %} 
+            {% if bill.submitted %}
+                <h4 class="m-3"><a href="{% url 'project:PreviousBill' bill.id 1 %}" ><i class='far fa-arrow-alt-circle-left me-3' style="font-size: 30px;"></i>Back To {{bill.bill_name}}</a></h4> 
+            {% else %}
+                <h4 class="m-3"><a href="{% url 'project:CurrentBill' 1 %}" ><i class='far fa-arrow-alt-circle-left me-3' style="font-size: 30px;"></i>Back To {{bill.bill_name}}</a></h4> 
+            {% endif %}
+        {% endif %} 
+    </div>  
+    <div class="row ms-3 pt-3">        
+        <h5>ITEM : {{item.description}}</h5>
+    </div>                 
+    <div class="row ms-3">
+        <div class="col-md-3  p-4">
+            <h4 class="fw-bold">Work Order BoQ details of item </h4>
+            <hr>            
+            <div>
+                <label for="rate" class="fw-bolder w-25">Rate : </label>
+                <span style="font-size:20px;" id="rate">{{ item.rate }}</span>            
+            </div>
+            <div >
+                <label for="units" class="fw-bolder w-25">Units : </label>
+                <span style="font-size:20px;" id="units">{{ item.unit }}</span>            
+            </div>
+            <div>
+                <label for="quantity" class="fw-bolder w-25">Quantity : </label>
+                <span style="font-size:20px;" id="quantity">{{ item.quantity }}</span> 
+            </div>
+            <div>
+                <label for="amount" class="fw-bolder w-25" >Amount : </label>
+                <span style="font-size:20px;" id="amount">{{ item.amount }}</span> 
+            </div>        
+        </div>            
+    </div>
+</div>    
+{% if page_object %}
+<div class="card-trans border-primary bg-light mt-5 m-3 p-3" > 
+    <div class="inline-items ">
+        <span class="mx-2 bg-secondary text-light p-3 fw-bold">Total Pages : {{page_object.paginator.num_pages}} (Showing 100 measurements per page)</span>
+        {% if bill.submitted %}
+            {% if page_object.has_previous %}
+            <a href="{% url 'project:PreviousMeasurements' bill.id item.id page_object.number|add:'-1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-reply text-primary py-2"></i></a> 
+            {% endif %}
+            <span class="mx-2 bg-secondary text-light p-3"><b>Current Page : {{page_object.number}}</b></span>
+            {% if page_object.has_next %}
+                <a href="{% url 'project:PreviousMeasurements' bill.id item.id page_object.number|add:'1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-share text-primary py-2"></i></a> 
+            {% endif %}                
+        {% else %}
+            {% if page_object.has_previous %}
+                <a href="{% url 'project:Measurements' item.id page_object.number|add:'-1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-reply text-primary py-2"></i></a> 
+            {% endif %}
+            <span class="mx-2 bg-secondary text-light p-3"><b>Current Page : {{page_object.number}}</b></span>
+            {% if page_object.has_next %}
+                <a href="{% url 'project:Measurements' item.id page_object.number|add:'1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-share text-primary py-2"></i></a> 
+            {% endif %}               
+        {% endif %}       
+    </div>  
+    
+    <table class="table table-bordered bg-light border-primary m-2 p-3 shadow-lg" style="max-width: 95%;font-weight: bold;">
+        <thead class="bg-secondary text-light">
+            <tr>
+                <th scope="col">DATE</th> 
+                <th scope="col">DESCRIPTION</th>
+                <th scope="col">COUNT</th>
+                <th scope="col">LENGTH</th>
+                <th scope="col">BREADTH</th>
+                <th scope="col">HEIGHT</th>
+                <th scope="col">NUMBERS</th>
+                <th scope="col">QUANTITY</th>                
+                <th scope="col">CONSULTANT</th>
+                <th scope="col">OWNER</th>
+            </tr>
+        </thead>
+        <tbody >            
+            {% for object in approval_status %}            
+            <tr >
+                <th scope="row">{{object.measurement.entry_date}}</th>
+                <td>{{object.measurement.m_description}}</td>
+                <td>{{object.measurement.count}}</td>
+                <td >{{object.measurement.length}}</td>
+                <td>{{object.measurement.breadth}}</td>
+                <td>{{object.measurement.height}}</td>
+                <td>{{object.measurement.number}}</td>
+                <td>{{object.measurement.quantity}}</td>     
+                <td>
+                    {% if object.measurement.consultant_approved %} 
+                    <span>APPROVED</span>
+                    {% endif %} 
+                    {% if object.open_count > 0 %} 
+                        <button type="button" class="btn btn-custom position-relative mx-3" 
+                        data-bs-toggle="popover" 
+                        data-bs-trigger="focus" 
+                        data-bs-placement="bottom"
+                        data-bs-html="true" 
+                        
+                        data-bs-content={{object.open_comments}}>
+                        Open
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{object.open_count}}
+                            <span class="visually-hidden">Open Comments </span>
+                        </span>
+                        </button>                   
+
+                    {% endif %}
+                    {% if object.unread_count > 0 %} 
+                        <button type="button" class="btn btn-custom position-relative mx-3" 
+                        data-bs-toggle="popover" 
+                        data-bs-trigger="focus" 
+                        data-bs-placement="bottom"
+                        data-bs-html="true" 
+                        data-bs-content={{object.unread_comments}}
+                        title="Unread consultant comments">
+                        Unread 
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{object.unread_count}}
+                            <span class="visually-hidden">Unread Comments</span>
+                        </span>
+                        </button>                   
+    
+                    {% endif %}
+                    {% if object.comment_count > 0 %}
+                    <a href="{% url 'project:ViewConsultantComments' object.measurement.id %}" title="All comments by consultant in detail." type="button" class="btn btn-custom position-relative mx-3">
+                        Comments 
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{object.comment_count}}
+                            <span class="visually-hidden">All Comments</span>
+                        </span>  
+                    </a>                   
+                    {% endif %}
+                </td> 
+                <td> 
+                    {% if object.measurement.owner_approved %} 
+                    <span>APPROVED</span>
+                    {% endif %} 
+                    {% if object.o_open_count > 0 %} 
+                        <button type="button" class="btn btn-custom position-relative mx-3" 
+                        data-bs-toggle="popover" 
+                        data-bs-trigger="focus" 
+                        data-bs-placement="bottom"
+                        data-bs-html="true" 
+                        
+                        data-bs-content={{object.o_open_comments}}>
+                        Open
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{object.o_open_count}}
+                            <span class="visually-hidden">Open Comments </span>
+                        </span>
+                        </button>                   
+
+                    {% endif %}
+                    {% if object.o_unread_comments_count > 0 %} 
+                        <button type="button" class="btn btn-custom position-relative mx-3" 
+                        data-bs-toggle="popover" 
+                        data-bs-trigger="focus" 
+                        data-bs-placement="bottom"
+                        data-bs-html="true" 
+                        data-bs-content={{object.o_unread_comments}}
+                        title="Unread owner comments">
+                        Unread 
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{object.o_unread_comments_count}}
+                            <span class="visually-hidden">Unread Comments</span>
+                        </span>
+                        </button>                   
+    
+                    {% endif %}
+                    {% if object.o_comment_count > 0 %}
+                    <a href="{% url 'project:ViewOwnerComments' object.measurement.id %}" title="All comments by owner in detail." type="button" class="btn btn-custom position-relative mx-3">
+                        Comments 
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{object.o_comment_count}}
+                            <span class="visually-hidden">All Comments</span>
+                        </span>  
+                    </a>                   
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}            
+        </tbody>
+    </table>  
+    <div class="inline-items ">
+        <span class="mx-2 bg-secondary text-light p-3 fw-bold">Total Pages : {{page_object.paginator.num_pages}} (Showing 100 measurements per page)</span>
+        {% if bill.submitted %}
+            {% if page_object.has_previous %}
+            <a href="{% url 'project:PreviousMeasurements' bill.id item.id page_object.number|add:'-1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-reply text-primary py-2"></i></a> 
+            {% endif %}
+            <span class="mx-2 bg-secondary text-light p-3"><b>Current Page : {{page_object.number}}</b></span>
+            {% if page_object.has_next %}
+                <a href="{% url 'project:PreviousMeasurements' bill.id item.id page_object.number|add:'1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-share text-primary py-2"></i></a> 
+            {% endif %}                
+        {% else %}
+            {% if page_object.has_previous %}
+                <a href="{% url 'project:Measurements' item.id page_object.number|add:'-1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-reply text-primary py-2"></i></a> 
+            {% endif %}
+            <span class="mx-2 bg-secondary text-light p-3"><b>Current Page : {{page_object.number}}</b></span>
+            {% if page_object.has_next %}
+                <a href="{% url 'project:Measurements' item.id page_object.number|add:'1' %}" class="btn btn-custom m-1 rounded-circle"><i class="fas fa-share text-primary py-2"></i></a> 
+            {% endif %}               
+        {% endif %}
+        
+    </div>  
+</div>
+{% endif %}       
+{% endif %}
+
+{% endblock %}
+{% block scripts %}
+    {{ block.super }} 
+
+    <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Initialize Popovers -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+      popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl);
+      });
+    });
+  </script>         
+{% endblock %} 

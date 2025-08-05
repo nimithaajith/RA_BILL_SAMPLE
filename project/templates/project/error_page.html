@@ -1,0 +1,19 @@
+{% extends 'project/base.html' %}
+{% block navcontent %}
+{% endblock %}
+{% block maincontent %}
+<div class="card-trans border-primary mt-5 mx-4 p-5" style="background-color: rgba(255, 255, 255, 0.253)">
+    <div class="row py-3 h-25">
+        
+        <div class="card card-red">
+            <div class="card-body"> 
+                <i class='far fa-frown' id="icon-red" ></i>          
+                <h2 class="card-title text-danger my-4 fw-bolder">ERROR OCCURED !!!</h5>
+                <h4 class="card-text">{{error_message}}</h4>                     
+                <a href="{% url 'project:Dashboard' %}" class="btn btn-custom">OK</a>                                 
+            </div>
+        </div>            
+    
+    </div>  
+</div>
+{% endblock %}

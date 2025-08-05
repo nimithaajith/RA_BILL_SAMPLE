@@ -1,0 +1,38 @@
+{% extends 'project/base.html' %}
+{% block navcontent %}
+
+
+{% endblock %}
+{% block maincontent %}
+<center>
+    {% if msg %}
+    <div class="p-3 my-2 bg-light">
+        <h2 class="form-heading text-danger fw-bolder m-3">{{msg}}</h2>
+    </div>    
+    {% endif %}
+    <div class="card-trans border-primary mt-5 m-3 p-3 w-25" style="background-color: rgba(255, 255, 255, 0.253);min-width: 300px;">
+        <div class="card-header bg-dark">
+            <h2 class="m-3 text-primary">New Bill</h2> 
+        </div>
+        <div class="card-body bg-light border border-primary">
+           
+            <form action="{% url 'project:CreateNewBill' %}" method="post" >
+                {% csrf_token %}
+                
+                <div class="my-3">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter bill name/number" required> 
+                </div>
+                <div class="my-3">
+                    <input type="date" id="bill_date" name="bill_date" class="form-control" required>                
+                </div>            
+                <div class="my-3">
+                    <input type="text" name="otherdetails" placeholder="Enter remarks , if any" class="form-control">
+                </div>   
+                <input type="submit" class="btn form-btn-custom m-2" value="Create">
+            </form>
+        </div>    
+    </div>
+    
+    </center>
+{% endblock %}
+    
