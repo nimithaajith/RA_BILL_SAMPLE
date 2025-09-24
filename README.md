@@ -37,13 +37,14 @@ Key Features:
 
 ### MBook Management
 ![MBook](Screenshots/CurrentBill.png)
+
 ### Approvals
 ![Approvals](Screenshots/MeasurementApprovalsStatus.png)
 
-### Homepage
-![Homepage](Screenshots/ActiveBillManagement.png)
+### ActiveBill Management
+![ActiveBill](Screenshots/ActiveBillManagement.png)
 
-### Sample measurement excel generrated
+### Sample measurement excel generated
 ![MBookEcxcel](Screenshots/measurementsheet_generated.png)
 
 
