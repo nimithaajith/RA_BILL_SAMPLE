@@ -15,7 +15,10 @@ Key Features:
     🐳 Fully Dockerized setup for easy deployment and scaling.
 
 ## 💻 Screenshots
-# Please see the Screenshots folder for real project screenshots
+### Homepage
+![Homepage](Screenshots/ActiveBillManagement.png)
+
+
 
 # Only some sample codes are provided, not entire project
 
