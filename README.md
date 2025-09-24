@@ -17,6 +17,16 @@ Key Features:
 ## 💻 Screenshots
 ### Homepage
 ![Homepage](Screenshots/ActiveBillManagement.png)
+### Homepage
+![Homepage](Screenshots/CeleryEmail1.png)
+### Homepage
+![Homepage](Screenshots/CurrentBill.png)
+### Homepage
+![Homepage](Screenshots/MeasurementApprovalsStatus.png)
+### Homepage
+![Homepage](Screenshots/WorkOrderBOQpage.png)
+### Homepage
+![Homepage](Screenshots/ActiveBillManagement.png)
 
 
 
