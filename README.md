@@ -2,10 +2,12 @@
 
 A robust, Dockerized Django web application designed to manage and automate the running bill account handling process for construction projects. It streamlines the creation of measurement sheets, abstract summaries, and GST-compliant tax receipts, while ensuring transparency and accountability throughout the billing lifecycle.
 
-Key Features:
-    ⚡ This project uses Celery with Redis as the message broker to handle heavy background tasks.  
-        One key task is **extracting and processing data from Work-Order Bill of Quantities (BOQ) Excel files** using Pandas.  
+Key Features: 
 
+    
+    ⚡ This project uses Celery with Redis as the message broker to handle heavy background tasks.  
+        One key task is **extracting and processing data from Work-Order Bill of Quantities (BOQ) Excel files** using Pandas. 
+        
     📊 Automated Generation of measurement sheets, abstract excel reports, and tax receipts.
 
     📧 Email Notifications sent automatically to owners, consultants, and contractors at critical stages.
@@ -31,26 +33,24 @@ Key Features:
 ![ActiveBillManagement](Screenshots/ActiveBillManagement.png)
 
 ### Sample Automated email
-![EmailSample](Screenshots/CeleryEmail1.png)
+![EmailSample](Screenshots/celery_email2.png)
 
-### Homepage
-![Homepage](Screenshots/CurrentBill.png)
-### Homepage
-![Homepage](Screenshots/MeasurementApprovalsStatus.png)
+### MBook Management
+![MBook](Screenshots/CurrentBill.png)
+### Approvals
+![Approvals](Screenshots/MeasurementApprovalsStatus.png)
 
 ### Homepage
 ![Homepage](Screenshots/ActiveBillManagement.png)
 
-
-
-### Homepage
-![Homepage](Screenshots/measurementsheet_generated.png)
+### Sample measurement excel generrated
+![MBookEcxcel](Screenshots/measurementsheet_generated.png)
 
 
 
 
 
-# Only some sample codes are provided, not entire project
+## Only some sample codes are provided, not entire project
 
 1. update .env with real values
 2. clone the repo
